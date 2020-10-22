@@ -13,7 +13,12 @@
       <use href="../../assets/icons.svg#icon-chevron-with-circle-left"></use>
     </svg>
   </button>
-  <button class="next" (click)="next()">
+  <button
+    class="next"
+    (click)="next()"
+    [disabled]="isAnimating || middleIndex <= 1"
+    [ngStyle]="middleIndex <= 1 && { opacity: 0.1, cursor: 'default' }"
+  >
     <svg class="icon">
       <use href="../../assets/icons.svg#icon-chevron-with-circle-right"></use>
     </svg>

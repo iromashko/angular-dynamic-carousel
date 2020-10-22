@@ -101,7 +101,31 @@ export class CarouselComponent implements OnInit, AfterViewInit {
   }
 
   prev(): void {
-    //
+    this.isAnimating = true;
+    this.moveLeftSideAlongWithMainElementPrev();
+    this.moveRemainingRightSidePrev();
+  }
+
+  moveRemainingRightSidePrev(): void {
+    let tempZIndex = this.baseZIndex;
+    const length = this.carousel.nativeElement.children.length;
+    for (let i = this.middleIndex + 1; i < length; i++) {
+      const element = this.carousel.nativeElement.children[i] as HTMLDivElement;
+      const currentTranslateXValue = gsap.getProperty(element, 'translateX');
+      const currentScale = gsap.getProperty(element, 'scale');
+      tempZIndex -= 1;
+
+      gsap.to(element, {
+        duration: 0.3,
+        zIndex: tempZIndex,
+        x:
+          typeof currentTranslateXValue === 'number' &&
+          currentTranslateXValue - 80,
+        scale:
+          typeof currentScale === 'number' &&
+          parseFloat((currentScale + 0.1).toFixed(1)),
+      });
+    }
   }
 
   next(): void {
@@ -112,6 +136,12 @@ export class CarouselComponent implements OnInit, AfterViewInit {
       this.moveLeftSideAlongWithMainElement();
       this.moveRemainingRightSide();
     }
+  }
+
+  get noMoreElements(): boolean {
+    return (
+      this.carousel.nativeElement.children[this.middleIndex + 1] === undefined
+    );
   }
 
   moveLeftSideAlongWithMainElement(): void {
@@ -170,6 +200,58 @@ export class CarouselComponent implements OnInit, AfterViewInit {
           parseFloat((currentScale - 0.1).toFixed(1)),
         onComplete: () => (this.isAnimating = false),
       });
+    }
+  }
+
+  moveLeftSideAlongWithMainElementPrev(): void {
+    for (let i = this.middleIndex; i <= 0; i--) {
+      const element = this.carousel.nativeElement.children[i] as HTMLDivElement;
+      const nextElement = this.carousel.nativeElement.children[
+        i + 1
+      ] as HTMLDivElement;
+      const currentTranslateXValue = gsap.getProperty(element, 'translateX');
+      const currZIndex = gsap.getProperty(element, 'zIndex');
+      const currentScale = gsap.getProperty(element, 'scale');
+
+      if (currZIndex === this.baseZIndex) {
+        gsap.to(element, {
+          duration: 0.3,
+          zIndex: -1,
+          x:
+            typeof currentTranslateXValue === 'number' &&
+            currentTranslateXValue - 80,
+          scale:
+            typeof currentScale === 'number' &&
+            parseFloat((currentScale - 0.1).toFixed(1)),
+        });
+        gsap.to(nextElement, {
+          duration: 0.3,
+          zIndex: this.baseZIndex,
+          x:
+            typeof currentTranslateXValue === 'number' &&
+            currentTranslateXValue,
+          scale:
+            typeof currentScale === 'number' &&
+            parseFloat(currentScale.toFixed(1)),
+        });
+        this.middleIndex = i + 1;
+      } else {
+        gsap.to(element, {
+          duration: 0.3,
+          zIndex: typeof currZIndex === 'number' && currZIndex - 1,
+          x:
+            typeof currentTranslateXValue === 'number' &&
+            currentTranslateXValue - 80,
+          onComplete: () => {
+            this.isAnimating = false;
+            if (this.noMoreElements) {
+              this.prevSlideFinished = true;
+            } else {
+              this.prevSlideFinished = false;
+            }
+          },
+        });
+      }
     }
   }
 }
