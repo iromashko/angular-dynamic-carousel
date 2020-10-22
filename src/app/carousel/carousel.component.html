@@ -8,7 +8,12 @@
       <figcaption class="title">{{ item.title }}</figcaption>
     </figure>
   </div>
-  <button class="prev" (click)="prev()">
+  <button
+    class="prev"
+    (click)="prev()"
+    [disabled]="prevSlideFinished || isAnimating"
+    [ngStyle]="prevSlideFinished && { opacity: 0.1, cursor: 'default' }"
+  >
     <svg class="icon">
       <use href="../../assets/icons.svg#icon-chevron-with-circle-left"></use>
     </svg>

@@ -204,7 +204,7 @@ export class CarouselComponent implements OnInit, AfterViewInit {
   }
 
   moveLeftSideAlongWithMainElementPrev(): void {
-    for (let i = this.middleIndex; i <= 0; i--) {
+    for (let i = this.middleIndex; i >= 0; i--) {
       const element = this.carousel.nativeElement.children[i] as HTMLDivElement;
       const nextElement = this.carousel.nativeElement.children[
         i + 1
@@ -242,6 +242,9 @@ export class CarouselComponent implements OnInit, AfterViewInit {
           x:
             typeof currentTranslateXValue === 'number' &&
             currentTranslateXValue - 80,
+          scale:
+            typeof currentScale === 'number' &&
+            parseFloat((currentScale - 0.1).toFixed(1)),
           onComplete: () => {
             this.isAnimating = false;
             if (this.noMoreElements) {
