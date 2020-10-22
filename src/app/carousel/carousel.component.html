@@ -1,19 +1,19 @@
 <div class="carousel-container" #carouselContainer>
   <div class="carousel" #carousel>
     <figure
-      class="carousel__item item"
+      class="carousel__item item--{{ i + 1 }}"
       *ngFor="let item of data; let i = index"
     >
-      <img src="" alt="" />
-      <figcaption class="title"></figcaption>
+      <img src="{{ item.url }}" alt="image {{ i + 1 }}" />
+      <figcaption class="title">{{ item.title }}</figcaption>
     </figure>
   </div>
-  <button class="prev">
+  <button class="prev" (click)="prev()">
     <svg class="icon">
       <use href="../../assets/icons.svg#icon-chevron-with-circle-left"></use>
     </svg>
   </button>
-  <button class="next">
+  <button class="next" (click)="next()">
     <svg class="icon">
       <use href="../../assets/icons.svg#icon-chevron-with-circle-right"></use>
     </svg>
