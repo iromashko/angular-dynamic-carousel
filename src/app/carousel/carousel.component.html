@@ -1,0 +1,21 @@
+<div class="carousel-container" #carouselContainer>
+  <div class="carousel" #carousel>
+    <figure
+      class="carousel__item item"
+      *ngFor="let item of data; let i = index"
+    >
+      <img src="" alt="" />
+      <figcaption class="title"></figcaption>
+    </figure>
+  </div>
+  <button class="prev">
+    <svg class="icon">
+      <use href="../../assets/icons.svg#icon-chevron-with-circle-left"></use>
+    </svg>
+  </button>
+  <button class="next">
+    <svg class="icon">
+      <use href="../../assets/icons.svg#icon-chevron-with-circle-right"></use>
+    </svg>
+  </button>
+</div>
